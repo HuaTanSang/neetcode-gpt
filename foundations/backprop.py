@@ -1,24 +1,23 @@
-import numpy as np
-from numpy.typing import NDArray
-from typing import Tuple
-
-
 class Solution:
-    def sigmoid(self, z):
-        return 1 / (1 + np.exp(-z))
+    def sigmoid(self, z: float) -> float:
+        if z >= 0:
+            return 1.0 / (1.0 + np.exp(-z))
 
-    def backward(self, x: NDArray[np.float64], w: NDArray[np.float64], b: float, y_true: float) -> Tuple[NDArray[np.float64], float]:
-        # x: 1D input array
-        # w: 1D weight array
-        # b: scalar bias
-        # y_true: true target value
-        #
-        # Forward: z = dot(x, w) + b, y_hat = sigmoid(z)
-        # Loss: L = 0.5 * (y_hat - y_true)^2
-        # Return: (dL_dw rounded to 5 decimals, dL_db rounded to 5 decimals)
-        z = np.dot(x, w) + b
-        y_hat = self.sigmoid(z)
-        
-        dL_dz = (y_hat - y_true) * y_hat * (1 - y_hat) 
-        
-        return np.round(dL_dz * x, 5), round(dL_dz, 5)
+        exp_z = np.exp(z)
+        return exp_z / (1.0 + exp_z)
+
+    def backward(
+        self,
+        x: NDArray[np.float64],
+        w: NDArray[np.float64],
+        b: float,
+        y_true: float,
+    ) -> Tuple[NDArray[np.float64], float]:
+        y_hat = self.sigmoid(np.dot(x, w) + b)
+
+        dL_dz = (y_hat - y_true) * y_hat * (1.0 - y_hat)
+        dL_dw = dL_dz * x
+
+        np.round(dL_dw, decimals=5, out=dL_dw)
+
+        return dL_dw, round(float(dL_dz), 5)
