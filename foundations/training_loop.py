@@ -22,7 +22,7 @@ class Solution:
             y_hat = X @ w + b
             loss = np.mean((y_hat - y) ** 2)
             dw = (2/n) * (X.T @ (y_hat - y))
-            db = 2/n * np.sum(y_hat - y) 
+            db = (2/n) * np.sum(y_hat - y) 
 
             w = w - lr*dw
             b = b - lr*db
